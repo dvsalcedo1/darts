@@ -84,7 +84,7 @@ def main():
       weight_decay=args.weight_decay)
 
   train_transform, valid_transform = utils._data_transforms_cifar10(args)
-  train_data = dset.CIFAR10(root=args.data, train=True, download=True, transform=train_transform)
+  train_data = dset.MNIST(root=args.data, train=True, download=True, transform=train_transform)
 
   num_train = len(train_data)
   indices = list(range(num_train))
@@ -100,7 +100,7 @@ def main():
       sampler=torch.utils.data.sampler.SubsetRandomSampler(indices[split:num_train]),
       pin_memory=True, num_workers=2)
 
-  scheduler = torch.optim.lr_scheduler.StepLR(
+  scheduler = torch.optim.lr_scheduler.CosineAnnealing(
         optimizer, float(args.epochs), eta_min=args.learning_rate_min)
 
   architect = Architect(model, args)
